@@ -2,7 +2,7 @@ import { Layout, Menu,Breadcrumb } from 'antd';
 import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import{Route,Routes} from 'react-router-dom'
-import  AddArticle from '../../components/addArticle'
+import  AddArticle from '../../components/AddArticle'
 const { Header, Content, Footer, Sider } = Layout;
 
  const Admin = () => {
@@ -45,14 +45,14 @@ const { Header, Content, Footer, Sider } = Layout;
           <Header className="header-background" style={{ padding: 0 }} />
           <Breadcrumb style={{padding:'1rem'}}>
           <Breadcrumb.Item>
-          <a href='/'>后台管理</a>
+          <a href='/admin'>后台管理</a>
           </Breadcrumb.Item>
           <Breadcrumb.Item>
-          <a href='/'>{crumb}</a>
+          <a href='/admin/'>{crumb}</a>
           </Breadcrumb.Item>
           </Breadcrumb>
-          <Content style={{ margin: '24px 16px 0' }}>
-            <div className="layout-background" style={{ padding: 24, minHeight: 360 }}>
+          <Content style={{ margin: '0 16px 0' }}>
+            <div className="layout-background" style={{ padding: 5, minHeight: 360 }}>
              <AddArticle/>
             </div>
           </Content>
