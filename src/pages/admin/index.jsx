@@ -6,6 +6,7 @@ import  AddArticle from '../../components/AddArticle'
 const { Header, Content, Footer, Sider } = Layout;
 
  const Admin = () => {
+
  const [collapsed,setCollapsed]  = useState(false)
  const [crumb,setCrumb]  = useState('添加文章')
  const text ={
@@ -53,7 +54,7 @@ const { Header, Content, Footer, Sider } = Layout;
           </Breadcrumb>
           <Content style={{ margin: '0 16px 0' }}>
             <div className="layout-background" style={{ padding: 5, minHeight: 360 }}>
-             <AddArticle/>
+             <AddArticle />
             </div>
           </Content>
           <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>

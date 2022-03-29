@@ -5,9 +5,14 @@ import {marked} from 'marked'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/github.css'
 import './index.less'
+import servicePath from '../../config/apiUrl'
 const { Option } = Select
 const { TextArea } = Input
-function AddArticle() {
+function AddArticle(prop) {
+console.log('prop=============>',prop)
+  useEffect(() => {
+    getTypeInfo()
+  },[])
   const [articleId,setArticleId] = useState(0)  // 文章的ID，如果是0说明是新增加，如果不是0，说明是修改
   const [articleTitle,setArticleTitle] = useState('')   //文章标题
   const [articleContent , setArticleContent] = useState('')  //markdown的编辑内容
@@ -37,9 +42,16 @@ function AddArticle() {
 
     //  },[articleContent])
 
-     
-    
-  const onSearch = () => {
+    async function getTypeInfo() {
+    let response= await fetch(servicePath.type,{
+    method:'get'
+   })
+     let data = await response.json()
+     setTypeInfo(data.data)
+  }
+
+  
+ const onSearch = () => {
 
   }
   const handleChange = () => {
@@ -68,11 +80,14 @@ function AddArticle() {
 
             </Col>
             <Col span={4}>
-              <Select defaultValue="所有" style={{ width: 120 }} onChange={handleChange}>
-                <Option value="all">所有</Option>
+              <Select defaultValue="选择类别" style={{ width: 120 }} onChange={handleChange}>
+                {/* <Option value="all">所有</Option>
                 <Option value="tools">工具</Option>
                 <Option value="bug">踩坑</Option>
-                <Option value="record">学习记录</Option>
+                <Option value="record">学习记录</Option> */}
+                {typeInfo.length!==0 ? typeInfo.map((option) => {
+                  return  <Option key={option.id} value={option.type_name}></Option>
+                }):''}
               </Select>
             </Col>
           </Row>
