@@ -24,11 +24,9 @@ const { Header, Content, Footer, Sider } = Layout;
             <Layout style={{minHeight:'100vh'}}>
         <Sider
           collapsible collapsed={collapsed} onCollapse={onCollapse} 
-         
         >
           <div className="logo" />
           <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} onClick={onChange}>
-         
             <Menu.Item key="add" icon={<VideoCameraOutlined />}>
             添加文章
             </Menu.Item>
@@ -39,9 +37,7 @@ const { Header, Content, Footer, Sider } = Layout;
               留言管理
             </Menu.Item>
           </Menu>
-
         </Sider>
-
         <Layout>
           <Header className="header-background" style={{ padding: 0 }} />
           <Breadcrumb style={{padding:'1rem'}}>
