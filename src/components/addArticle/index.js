@@ -6,28 +6,23 @@ import moment from 'moment'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/github.css'
 import './index.less'
-import {addArticle} from '../../config/api/index'
+import { addArticle, updateArticle, publishArticle } from '../../config/api/index'
 import servicePath from '../../config/apiUrl'
 const { Option } = Select
 const { TextArea } = Input
 function AddArticle(prop) {
   const [articleId, setArticleId] = useState(0)  // 文章的ID，如果是0说明是新增加，如果不是0，说明是修改
-  const [articleTitle, setArticleTitle] = useState('')   //文章标题
-  const [articleContent, setArticleContent] = useState('')  //markdown的编辑内容
   const [markdownContent, setMarkdownContent] = useState('预览内容') //html内容
-  const [introducemd, setIntroducemd] = useState()            //简介的markdown内容
   const [introducehtml, setIntroducehtml] = useState('等待编辑') //简介的html内容
-  const [showDate, setShowDate] = useState()   //发布日期
-  const [updateDate, setUpdateDate] = useState() //修改日志的日期
-  const [typeInfo, setTypeInfo] = useState([]) // 文章类别信息
-  const [selectedType, setSelectType] = useState(1) //选择的文章类别
+  const [typeInfo, setTypeInfo] = useState([]) //简介的html内容
+
   const [form] = Form.useForm()
   const init = {
-    title:'',
-    ariticle:'',
-    introduce:'',
-    addtime:'',
-    typeId:-1
+    title: '',
+    ariticle: '',
+    introduce: '',
+    addtime: '',
+    type_id: -1
   }
   useEffect(() => {
     getTypeInfo()
@@ -53,48 +48,75 @@ function AddArticle(prop) {
     let data = await response.json()
     setTypeInfo(data.data)
   }
-  const handleFinish = async  (values) => {
-   console.log('Received values of form: ', values);
-   let param=   new URLSearchParams()
-   param.append('title',values['title'])
-   let date = new Date(values['addtime']['_d']).getTime()
-   param.append('addtime',moment(parseInt(date)).format('YYYY-MM-DD HH:mm:ss'))
-   param.append('content',values['content'])
-   param.append('introduce',values['introduce'])
-   param.append('type_id',values['typeId'])
-   
-   addArticle(param).then((res) => {
-     if(res.data){
-       message.success("nice你添加成功了"+res.data)
-     }
-   }).catch((err) => {console.log(err);})
-  
-  // let response =  await  fetch('http://localhost:7001/admin/article',{
-  //     method:'post',
-  //     headers:{
-  //      'Content-Type':' application/x-www-form-urlencoded;charset=UTF-8'
-  //     },
-  //     body:param
-  //   })
-  //   let result = await response.json()
-  //   message.success(result.data)
+  const handleFinish = async (values) => {
+    console.log('Received values of form: ', values);
+    let param = new URLSearchParams()
+    param.append('title', values['title'])
+    let date = new Date(values['addtime']['_d']).getTime()
+    param.append('addtime', moment(parseInt(date)).format('YYYY-MM-DD HH:mm:ss'))
+    param.append('content', values['content'])
+    param.append('introduce', values['introduce'])
+    param.append('type_id', values['typeId'])
+    if (articleId == 0) {
+      addArticle(param).then((res) => {
+        if (res.data) {
+          message.success(res.data)
+          setArticleId(res.insertId)
+        }
+      }).catch((err) => { console.log(err); })
+    }
+    else {
+      param.append('id', articleId)
+      updateArticle(param).then((res) => {
+        if (res.data) {
+          message.success(res.data)
+        }
+      }).catch((err) => { console.log(err); })
+    }
+
+
+    // let response =  await  fetch('http://localhost:7001/admin/article',{
+    //     method:'post',
+    //     headers:{
+    //      'Content-Type':' application/x-www-form-urlencoded;charset=UTF-8'
+    //     },
+    //     body:param
+    //   })
+    //   let result = await response.json()
+    //   message.success(result.data)
   }
-  const validatorType = (_,value) => {
+  const handlePublish = () => {
+    if (articleId === 0) {
+      message.warn('请先暂存文章')
+      return
+    }
+    let ojb = { ...form.getFieldsValue() }
+    console.log('ojb.addtime._d=============>', ojb.addtime._d)
+    let stamp = new Date(ojb.addtime._d.toString())
+    ojb.addtime = moment(stamp).format('YYYY-MM-DD HH:mm:ss')
+    ojb.publish = 1
+    ojb.id = articleId
+    publishArticle(ojb).then((res) => {
+      if (res.data !== null) {
+        message.success(res.data)
+        form.resetFields([])
+      }
+    })
+  }
+  const validatorType = (_, value) => {
     console.log('value=============>', value)
     if (value === -1) {
       return Promise.reject(new Error('选择文章类型'))
-    }else{
+    } else {
       return Promise.resolve()
 
     }
   }
   const onSearch = () => {
-
   }
   const handleChange = (value) => {
     console.log(value);
   }
-  const handleCache = () => { }
 
   const handleTextChange = (e) => {
     setMarkdownContent(marked.parse(e.target.value))
@@ -107,9 +129,7 @@ function AddArticle(prop) {
     <div>
       <Form form={form} onFinish={handleFinish} initialValues={init}>
         <Row gutter={5} className='add-article'>
-
           <Col span={18} >
-
             <Row >
               <Col span={20}>
                 <Form.Item name='title'
@@ -123,11 +143,10 @@ function AddArticle(prop) {
                 </Form.Item>
               </Col>
               <Col span={4}>
-                <Form.Item name='typeId'
+                <Form.Item name='type_id'
                   rules={[{ required: true, validator: validatorType }]}
                 >
                   <Select style={{ width: 120 }} onChange={handleChange}>
-
                     <Option disabled value={-1} >{'选择类型'}</Option>
                     {typeInfo.length !== 0 ? typeInfo.map((option) => {
                       return <Option key={option.id} value={option.id} >{option.type_name}</Option>
@@ -161,8 +180,8 @@ function AddArticle(prop) {
 
           <Col span={6}>
             <Space size={'large'} direction='horizental' wrap='true'>
-              <Button onClick={() => { handleCache() }}>暂存文章</Button>
-              <Button htmlType='submit' type='primary' >发布文章</Button>
+              <Button htmlType='submit' type='primary'>暂存文章</Button>
+              <Button onClick={() => { handlePublish() }}>发布文章</Button>
             </Space>
             <br />
             <br />
@@ -193,4 +212,4 @@ function AddArticle(prop) {
 
 
 
-export default  AddArticle
+export default AddArticle
