@@ -56,7 +56,7 @@ function AddArticle(prop) {
     param.append('addtime', moment(parseInt(date)).format('YYYY-MM-DD HH:mm:ss'))
     param.append('content', values['content'])
     param.append('introduce', values['introduce'])
-    param.append('type_id', values['typeId'])
+    param.append('type_id', values['type_id'])
     if (articleId == 0) {
       addArticle(param).then((res) => {
         if (res.data) {

@@ -4,7 +4,10 @@ import { useState } from 'react';
 import{Route,Routes,useNavigate} from 'react-router-dom'
 import  AddArticle from '../../components/AddArticle'
 import ArticleList from '../../components/ArticleList'
+import UpdateArticle from '../../components/UpdateArticle'
+import Reviews from '../../components/Reviews';
 const { Header, Content, Footer, Sider } = Layout;
+const {SubMenu} =Menu
 
  const Admin = () => {
  const nav= useNavigate()
@@ -14,6 +17,8 @@ const { Header, Content, Footer, Sider } = Layout;
     add:'添加文章',
     list:'文章管理',
     reviews:'留言管理',
+    update:'修改文章',
+    list:'文章列表',
  }
  const onCollapse= collapsed => {
     setCollapsed(collapsed)
@@ -32,9 +37,14 @@ const { Header, Content, Footer, Sider } = Layout;
             <Menu.Item key="add" icon={<VideoCameraOutlined />}>
             添加文章
             </Menu.Item>
-            <Menu.Item key="list" icon={<UploadOutlined />}>
-            文章管理
-            </Menu.Item>
+            <SubMenu key="manage" icon={<UploadOutlined />} title='文章管理'>
+              <Menu.Item key='update'>
+               修改文章
+              </Menu.Item>
+              <Menu.Item key='list'>
+                文章列表
+              </Menu.Item>
+            </SubMenu>
             <Menu.Item key="reviews" icon={<UserOutlined />}>
               留言管理
             </Menu.Item>
@@ -46,7 +56,6 @@ const { Header, Content, Footer, Sider } = Layout;
           <Breadcrumb.Item>
           <a href='/admin'>后台管理</a>
           </Breadcrumb.Item>
-
           <Breadcrumb.Item>
           {crumb}
           </Breadcrumb.Item>
@@ -56,7 +65,10 @@ const { Header, Content, Footer, Sider } = Layout;
          
             <Routes>
               <Route path='' element={<AddArticle/>}></Route>
-              <Route path='/add' element={<AddArticle/>}></Route>
+              <Route path='add' element={<AddArticle/>}></Route>
+              <Route path='reviews' element={<Reviews/>}></Route>
+              <Route path='list' element={<ArticleList/>}></Route>
+              <Route path='update' element={<UpdateArticle/>}></Route>
             </Routes>
           
             </div>

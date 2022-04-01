@@ -1,45 +1,84 @@
-// import React from 'react'
+import React from 'react'
+import { useEffect ,useState } from 'react';
+import { Table, Tag, Space, Spin } from 'antd';
+import {getAllArticle} from '../../config/api'
+import moment from 'moment'
+function ArticleList() {
+  const [listData,setListData]= useState([])
+ useEffect(()=>{
+  getAllArticle().then(res=>{
+    if(res.data){
+       setListData(res.data)
+    }
+  })
+ },[])
 
-// function ArticleList() {
+const columns = [
+  {
+    title: '文章标题',
+    dataIndex: 'title',
+    width:'10rem',
+    render: text => <a >{text}</a>,
+  },
+  {
+    title: '文章类型',
+    dataIndex: 'type',
+  },
+  {
+    title: '文章简介',
+    dataIndex: 'introduce',
+  },
+  {
+    title: '文章内容',
+    dataIndex: 'content',
+    ellipsis: true,
+  },
+  {
+    title: '发布状态',
+    dataIndex: 'publish',
+    render: tag => {
+          let color = tag == 0 ? 'geekblue' : 'green';
+          let text='已发布' 
+          if(color=='geekblue'){
+            text='未发布'
+          }
+           return <Tag color={color} key={tag}>
+              {text}
+            </Tag>
+      }
   
-//     return (
-//       <Layout style={{minHeight:'100vh'}}>
-//   <Sider
-//     collapsible collapsed={collapsed} onCollapse={onCollapse} 
-//   >
-//     <div className="logo" />
-//     <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} onClick={onChange}>
-//       <Menu.Item key="add" icon={<VideoCameraOutlined />}>
-//       添加文章
-//       </Menu.Item>
-//       <Menu.Item key="list" icon={<UploadOutlined />}>
-//       文章管理
-//       </Menu.Item>
-//       <Menu.Item key="reviews" icon={<UserOutlined />}>
-//         留言管理
-//       </Menu.Item>
-//     </Menu>
-//   </Sider>
-//   <Layout>
-//     <Header className="header-background" style={{ padding: 0 }} />
-//     <Breadcrumb style={{padding:'1rem'}}>
-//     <Breadcrumb.Item>
-//     <a href='/admin'>后台管理</a>
-//     </Breadcrumb.Item>
-//     <Breadcrumb.Item>
-//     <a href='/admin/'>{crumb}</a>
-//     </Breadcrumb.Item>
-//     </Breadcrumb>
-//     <Content style={{ margin: '0 16px 0' }}>
-//       <div className="layout-background" style={{ padding: 5, minHeight: 360 }}>
-//        <AddArticle />
-//       </div>
-//     </Content>
-//     <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
-//   </Layout>
-// </Layout>
-//     )
-  
-// }
+  },
+  {
+    title: '发布时间',
+    dataIndex: 'addtime',
+    render:(text)=> moment(text.toString()).format('YYYY-MM-DD HH:mm:ss')
+   
+  },
+  {
+    title: '发布时间',
+    dataIndex: 'update_time',
+    render:(text)=> moment(text.toString()).format('YYYY-MM-DD HH:mm:ss')
+  },
+  {
+    title:'阅读量',
+    dataIndex:'read'
+  },
+  {
+    title: 'Action',
+    dataIndex: 'action',
+    render: (text, record) => (
+      <Space size="middle">
+        <a>Invite {record.name}</a>
+        <a>Delete</a>
+      </Space>
+    ),
+  },
+];
+  return (
+    <div>
+<Table   bordered  pagination={{ position: ['bottomCenter'] }}  columns={columns} dataSource={listData} />
+    </div>
+  )
+}
 
-// export default ArticleList
+export default ArticleList
