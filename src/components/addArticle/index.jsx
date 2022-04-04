@@ -56,7 +56,7 @@ function AddArticle(prop) {
     param.append('addtime', moment(parseInt(date)).format('YYYY-MM-DD HH:mm:ss'))
     param.append('content', values['content'])
     param.append('introduce', values['introduce'])
-    param.append('type_id', values['typeId'])
+    param.append('type_id', values['type_id'])
     if (articleId == 0) {
       addArticle(param).then((res) => {
         if (res.data) {
@@ -169,7 +169,9 @@ function AddArticle(prop) {
               <Col span={12}>
                 <div className='hljs show-html ' dangerouslySetInnerHTML={{ __html: markdownContent }} placeholder='预览内容'  >
                 </div>
-         
+                {/* <div className='marked-show html-content'  placeholder='预览内容'  >
+              {markdownContent}
+              </div> */}
               </Col>
             </Row>
 
