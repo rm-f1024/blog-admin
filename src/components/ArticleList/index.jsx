@@ -1,5 +1,6 @@
 import React from 'react'
 import { useEffect ,useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Table, Tag, Space, Spin } from 'antd';
 import {getAllArticle} from '../../config/api'
 import moment from 'moment'
@@ -12,13 +13,14 @@ function ArticleList() {
     }
   })
  },[])
+ 
 
 const columns = [
   {
     title: '文章标题',
     dataIndex: 'title',
     width:'10rem',
-    render: text => <a >{text}</a>,
+    render: (text,record) => <Link to={`/admin/update?id=${record.id}`} >{text}</Link>,
   },
   {
     title: '文章类型',

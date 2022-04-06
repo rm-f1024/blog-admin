@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { Row, Col, Input, Select, Space, Button, DatePicker, Form, message } from 'antd'
 import { DownCircleOutlined } from '@ant-design/icons'
 import { marked } from 'marked'
@@ -11,11 +12,13 @@ import servicePath from '../../config/apiUrl'
 const { Option } = Select
 const { TextArea } = Input
 function UpdateArticle() {
-  const [articleId, setArticleId] = useState(0)  // 文章的ID，如果是0说明是新增加，如果不是0，说明是修改
+  const [searchParams, setSearchParams] = useSearchParams();
+  console.log('searchParams.get()=============>',searchParams.get('id'))
+  const [articleId, setArticleId] = useState(searchParams.get('id'))  // 文章的ID，如果是0说明是新增加，如果不是0，说明是修改
   const [markdownContent, setMarkdownContent] = useState('预览内容') //html内容
   const [introducehtml, setIntroducehtml] = useState('等待编辑') //简介的html内容
   const [typeInfo, setTypeInfo] = useState([]) //简介的html内容
-
+ 
   const [form] = Form.useForm()
   const init = {
     title: '',
@@ -136,6 +139,9 @@ function UpdateArticle() {
           <Col span={18} >
             <Row >
               <Col span={20}>
+              <Form.Item name='id' label='id'>
+              {articleId}
+              </Form.Item>
                 <Form.Item name='title'
                   rules={[{ required: true, message: 'Please input your title!' }]}
                 >
