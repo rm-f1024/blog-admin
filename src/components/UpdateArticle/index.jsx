@@ -7,29 +7,37 @@ import moment from 'moment'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/github.css'
 import './index.less'
-import { addArticle, updateArticle, publishArticle } from '../../config/api/index'
+import { addArticle, updateArticle, publishArticle,getArticleById } from '../../config/api/index'
 import servicePath from '../../config/apiUrl'
 const { Option } = Select
 const { TextArea } = Input
+
 function UpdateArticle() {
   const [searchParams, setSearchParams] = useSearchParams();
-  console.log('searchParams.get()=============>',searchParams.get('id'))
-  const [articleId, setArticleId] = useState(searchParams.get('id'))  // 文章的ID，如果是0说明是新增加，如果不是0，说明是修改
+  const [isdisabled,setIsdisabled] = useState(false)
+  const [articleId, setArticleId] = useState(searchParams.get('id')||0)  // 文章的ID，如果是0说明是新增加，如果不是0，说明是修改
   const [markdownContent, setMarkdownContent] = useState('预览内容') //html内容
   const [introducehtml, setIntroducehtml] = useState('等待编辑') //简介的html内容
   const [typeInfo, setTypeInfo] = useState([]) //简介的html内容
- 
   const [form] = Form.useForm()
-  const init = {
+ 
+  let init = {
+    id:articleId,
     title: '',
-    ariticle: '',
+    content: '',
     introduce: '',
-    addtime: '',
+    update_time: moment(),
     type_id: -1
   }
   useEffect(() => {
+    if(articleId!==0){
+      getArticle()
+    }
+  }, [articleId])
+  useEffect(() => {
     getTypeInfo()
-  }, [])
+  },[])
+
   marked.setOptions({
     renderer: new marked.Renderer(),
     highlight: function (code) {
@@ -51,10 +59,7 @@ function UpdateArticle() {
     let data = await response.json()
     setTypeInfo(data.data)
   }
-  //通过Id获取文章
-  const getArticleById = ()=>{
 
-  }
   const handleFinish = async (values) => {
     console.log('Received values of form: ', values);
     let param = new URLSearchParams()
@@ -94,18 +99,17 @@ function UpdateArticle() {
   }
   const handlePublish = () => {
     if (articleId === 0) {
-      message.warn('请先暂存文章')
+      message.warn('请先查找文章')
       return
     }
     let ojb = { ...form.getFieldsValue() }
-    console.log('ojb.addtime._d=============>', ojb.addtime._d)
-    let stamp = new Date(ojb.addtime._d.toString())
-    ojb.addtime = moment(stamp).format('YYYY-MM-DD HH:mm:ss')
+   
+    ojb.update_time = moment(ojb.update_time).format('YYYY-MM-DD HH:mm:ss')
     ojb.publish = 1
     ojb.id = articleId
     publishArticle(ojb).then((res) => {
       if (res.data !== null) {
-        message.success(res.data)
+        message.success("修改成功")
         form.resetFields([])
       }
     })
@@ -119,7 +123,34 @@ function UpdateArticle() {
 
     }
   }
-  const onSearch = () => {
+ 
+
+  const getArticle = (e) => {
+    console.log('e=============>',e)
+  if(e!==undefined&&e!==null){
+    setArticleId(parseInt(e))
+    return
+  }
+   if(!isNaN(articleId)){
+    getArticleById(articleId).then((res) => {
+      if(res.data!='404'){
+        init=res.data[0]
+        form.setFieldsValue({id:init.id})
+        form.setFieldsValue({content:init.content})
+        let time= +new Date(init.update_time.toString())
+        form.setFieldsValue({update_time:moment(time)})
+        form.setFieldsValue({type_id:init.type_id})
+        form.setFieldsValue({title:init.title})
+        form.setFieldsValue({introduce:init.introduce})
+        setIsdisabled(true)
+      }
+      else{
+        setArticleId(0)
+        message.warn('无此文章')
+        setIsdisabled(false)
+      }
+    })
+   }
   }
   const handleChange = (value) => {
     console.log(value);
@@ -132,16 +163,15 @@ function UpdateArticle() {
     console.log(e.target.value);
     setIntroducehtml(marked.parse(e.target.value))
   }
+  console.log('articleId=============>',articleId)
   return (
+
     <div>
       <Form form={form} onFinish={handleFinish} initialValues={init}>
         <Row gutter={5} className='add-article'>
           <Col span={18} >
             <Row >
               <Col span={20}>
-              <Form.Item name='id' label='id'>
-              {articleId}
-              </Form.Item>
                 <Form.Item name='title'
                   rules={[{ required: true, message: 'Please input your title!' }]}
                 >
@@ -163,6 +193,7 @@ function UpdateArticle() {
                     }) : ''}
                   </Select>
                 </Form.Item>
+               <Input.Search enterButton prefix='文章id:' defaultValue={articleId} disabled={isdisabled}  onSearch={(e) => {getArticle(e)}}/>
               </Col>
             </Row>
 
@@ -190,7 +221,7 @@ function UpdateArticle() {
 
           <Col span={6}>
             <Space size={'large'} direction='horizental' wrap='true'>
-              <Button htmlType='submit' type='primary'>修改文章</Button>
+              <Button onClick={handlePublish} htmlType='submit' type='primary'>修改文章</Button>
         
             </Space>
             <br />

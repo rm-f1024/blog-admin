@@ -1,6 +1,6 @@
 import React from 'react'
 import { useEffect ,useState } from 'react';
-
+import { Link } from 'react-router-dom';
 import { Table, Tag, Space, Spin, message } from 'antd';
 import {getAllArticle,deleteArticle} from '../../config/api'
 import moment from 'moment'
@@ -15,7 +15,6 @@ function ArticleList() {
       datas.forEach((item,index,arr) => {
         item.key=index
      });
-       console.log('datas===============>',JSON.stringify(datas))
        setListData(datas)
     }
   })
@@ -38,6 +37,7 @@ const columns = [
     title: '文章标题',
     dataIndex: 'title',
     width:'10rem',
+  
     render: (text,record) => <Link to={`/admin/update?id=${record.id}`} >{text}</Link>,
 
   },
@@ -58,6 +58,7 @@ const columns = [
   {
     title: '发布状态',
     dataIndex: 'publish',
+    align: 'center' ,
     render: tag => {
           let color = tag == 0 ? 'geekblue' : 'green';
           let text='已发布' 
@@ -95,7 +96,7 @@ const columns = [
       // console.log('index===============>',index)
    
       return  ( <Space size="middle">
-      <a href='javascript:void(0)' onClick={()=>handleDel(record.id)}>Delete {record.id}</a>
+      <a  onClick={()=>handleDel(record.id)}>Delete {record.id}</a>
     </Space>)
     }
     ,

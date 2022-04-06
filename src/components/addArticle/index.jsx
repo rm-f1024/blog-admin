@@ -15,7 +15,6 @@ function AddArticle(prop) {
   const [markdownContent, setMarkdownContent] = useState('预览内容') //html内容
   const [introducehtml, setIntroducehtml] = useState('等待编辑') //简介的html内容
   const [typeInfo, setTypeInfo] = useState([]) //简介的html内容
-
   const [form] = Form.useForm()
   const init = {
     title: '',
@@ -91,15 +90,15 @@ function AddArticle(prop) {
       return
     }
     let ojb = { ...form.getFieldsValue() }
-    console.log('ojb.addtime._d=============>', ojb.addtime._d)
-    let stamp = new Date(ojb.addtime._d.toString())
-    ojb.addtime = moment(stamp).format('YYYY-MM-DD HH:mm:ss')
+    
+    ojb.addtime = ojb.addtime.format('YYYY-MM-DD HH:mm:ss')
+    console.log('addtime=============>',ojb.addtime)
     ojb.publish = 1
     ojb.id = articleId
     publishArticle(ojb).then((res) => {
       if (res.data !== null) {
         message.success(res.data)
-        form.resetFields([])
+        form.resetFields()
       }
     })
   }
