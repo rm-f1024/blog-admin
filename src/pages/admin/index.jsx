@@ -62,7 +62,6 @@ const {SubMenu} =Menu
           </Breadcrumb>
           <Content style={{ margin: '0 16px 0' }}>
             <div className="layout-background" style={{ padding: 5, minHeight: 360 }}>
-         
             <Routes>
               <Route path='' element={<AddArticle/>}></Route>
               <Route path='add' element={<AddArticle/>}></Route>
@@ -70,7 +69,6 @@ const {SubMenu} =Menu
               <Route path='list' element={<ArticleList/>}></Route>
               <Route path='update' element={<UpdateArticle/>}></Route>
             </Routes>
-          
             </div>
           </Content>
           <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
