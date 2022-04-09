@@ -51,7 +51,7 @@ export default function Login() {
       body: JSON.stringify(useObj)
     })
     let data = await response.json()
-    if (data.data.includes('失败')) {
+    if (data.openId===undefined) {
       message.warning(data.data)
       setTimeout(() => {
         setIsloading(false)

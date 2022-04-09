@@ -90,9 +90,9 @@ function AddArticle(prop) {
       return
     }
     let ojb = { ...form.getFieldsValue() }
-    
+
     ojb.addtime = ojb.addtime.format('YYYY-MM-DD HH:mm:ss')
-    console.log('addtime=============>',ojb.addtime)
+    console.log('addtime=============>', ojb.addtime)
     ojb.publish = 1
     ojb.id = articleId
     publishArticle(ojb).then((res) => {
