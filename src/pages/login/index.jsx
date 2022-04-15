@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Card, Input, Button, Spin, Space, message } from 'antd'
 import { KeyOutlined, UserOutlined } from '@ant-design/icons';
+import {checkLogin} from '../../config/api/index'
 import servicePath from '../../config/apiUrl'
 import './index.less'
 export default function Login() {
@@ -36,35 +37,42 @@ export default function Login() {
       }, 500);
       return false
     }
-    let useObj = {
-      userName,
-      password
-    }
-    const response = await fetch(servicePath.checkLogin, {
-      method: 'post',
-      mode: 'cors',
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json'
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: JSON.stringify(useObj)
+  
+    // const response = await fetch(servicePath.checkLogin, {
+    //   method: 'post',
+    //   mode: 'cors',
+    //   credentials: "include",
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //     // 'Content-Type': 'application/x-www-form-urlencoded',
+    //   },
+    //   body: JSON.stringify(useObj)
+    // })
+    // let data = await response.json()
+  const params=   new URLSearchParams()
+  params.append('userName',userName)
+  params.append('password',password)
+
+    checkLogin(params).then((res) => {
+      if(res){
+        const {data,openId}= res
+        if (openId===undefined) {
+          message.warning(data)
+          setTimeout(() => {
+            setIsloading(false)
+           }, 500);
+        }
+        else {
+          message.success(data)
+          localStorage.setItem('openId',openId)
+          setTimeout(() => {
+           setIsloading(false)
+            navigate('/admin')
+          }, 1000);
+        }
+      }
     })
-    let data = await response.json()
-    if (data.openId===undefined) {
-      message.warning(data.data)
-      setTimeout(() => {
-        setIsloading(false)
-       }, 500);
-    }
-    else {
-      message.success(data.data)
-      localStorage.setItem('openId',data.openId)
-      setTimeout(() => {
-       setIsloading(false)
-        navigate('/admin')
-      }, 1000);
-    }
+   
   }
 
   return (

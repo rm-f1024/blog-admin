@@ -6,3 +6,5 @@ export const publishArticle = (param) =>  patch('/article',param)
 export const getAllArticle = () =>  get('/allarticle')
 export const deleteArticle = (param) =>  _delete('/article',param)
 export const getArticleById = (param) =>  get('/article',param)
+
+export const checkLogin = (param) =>  post('/checkLogin',param)

@@ -15,7 +15,7 @@ export default function Main() {
       <Routes>
         <Route path='/' element={<Login />} />
         <Route path='/admin/*'  element={<Admin/>} >
-        <Route path='add' element={AddArticle}></Route>
+          <Route path='add' element={AddArticle}></Route>
           <Route path='list' element={ArticleList}></Route>
           <Route path='reviews' element={Reviews}></Route>
           <Route path='update' element={UpdateArticle}></Route>
@@ -25,3 +25,4 @@ export default function Main() {
     </Router>
   )
 }
+
