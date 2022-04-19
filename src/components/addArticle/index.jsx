@@ -200,7 +200,8 @@ function AddArticle(prop) {
             >
               <DatePicker size='large' placeholder='发布日期' />
             </Form.Item>
-            <DatePicker size='large' placeholder='修改日期' />
+            
+            {/* <DatePicker size='large' placeholder='修改日期' /> */}
 
           </Col>
         </Row>

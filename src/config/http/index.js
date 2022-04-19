@@ -1,8 +1,10 @@
 import axios from 'axios'
 import  {message} from 'antd'
 const {NODE_ENV} = process.env
-const local= '127.0.0.1:7001'//127.0.0.1:7001
-const ipUrl = NODE_ENV=='production'?  'http://106.52.41.19:7001/admin':`http://${local}/admin`
+
+const local= 'localhost:7001'
+const ipUrl = NODE_ENV=='production'?  'http://106.52.41.19/api/admin':`http://${local}/admin`
+
 
 axios.defaults.baseURL=ipUrl
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
