@@ -15,6 +15,7 @@ function AddArticle(prop) {
   const [markdownContent, setMarkdownContent] = useState('预览内容') //html内容
   const [introducehtml, setIntroducehtml] = useState('等待编辑') //简介的html内容
   const [typeInfo, setTypeInfo] = useState([]) //简介的html内容
+  const [title, setTitle] = useState('') //简介的html内容
   const [form] = Form.useForm()
   const init = {
     title: '',
@@ -119,6 +120,7 @@ function AddArticle(prop) {
 
   const handleTextChange = (e) => {
     setMarkdownContent(marked.parse(e.target.value))
+    setTitle((e.target.value+'').match(/##.*/))
   }
   const handleIntroduceChange = (e) => {
     console.log(e.target.value);
@@ -164,7 +166,7 @@ function AddArticle(prop) {
                   </TextArea>
                 </Form.Item>
               </Col>
-
+ 
               <Col span={12}>
                 <div className='hljs show-html ' dangerouslySetInnerHTML={{ __html: markdownContent }} placeholder='预览内容'  >
                 </div>

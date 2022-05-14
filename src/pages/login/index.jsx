@@ -15,6 +15,7 @@ export default function Login() {
   }
   const handleSetUserName = (e) => {
     setUN(e.target.value)
+    console.log('e=============>',e)
   }
   const handleEnter =(event) => {
     if(event.keyCode==13){
@@ -65,6 +66,7 @@ export default function Login() {
         else {
           message.success(data)
           localStorage.setItem('openId',openId)
+          localStorage.setItem('isLogin',true)
           setTimeout(() => {
            setIsloading(false)
             navigate('/admin')

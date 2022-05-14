@@ -18,7 +18,6 @@ const {SubMenu} =Menu
     list:'文章管理',
     reviews:'留言管理',
     update:'修改文章',
-    list:'文章列表',
  }
  const onCollapse= collapsed => {
     setCollapsed(collapsed)

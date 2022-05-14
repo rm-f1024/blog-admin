@@ -1,9 +1,7 @@
 import axios from 'axios'
 import  {message} from 'antd'
-const {NODE_ENV} = process.env
+import ipUrl from '../url'
 
-const local= 'localhost:7001'
-const ipUrl = NODE_ENV=='production'?  'http://106.52.41.19/api/admin':`http://${local}/admin`
 
 
 axios.defaults.baseURL=ipUrl

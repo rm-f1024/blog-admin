@@ -27,7 +27,7 @@ function ArticleList() {
       if(res.data){
         console.log('res===============>',res)
         message.success(res.data)
-        nav('/')
+        nav('/admin/list')
       }
     })
  }
