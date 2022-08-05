@@ -69,7 +69,8 @@ export default function Login() {
           localStorage.setItem('isLogin',true)
           setTimeout(() => {
            setIsloading(false)
-            navigate('/admin')
+           window.location.href=window.location.origin+"/admin"
+            // navigate('/admin')
           }, 1000);
         }
       }
