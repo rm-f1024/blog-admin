@@ -2,7 +2,7 @@
   "name": "admin-blog",
   "version": "0.1.0",
   "private": true,
-  "homepage": "/alex-blog",
+  "homepage": "/alex-blog/build/",
   "dependencies": {
     "@babel/core": "^7.16.0",
     "@craco/craco": "^6.4.3",

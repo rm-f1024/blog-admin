@@ -21,10 +21,9 @@ export default function Main() {
     component:'HomePage',
     auth:true,
    },
-
   ]
   return (
-    <Router >
+    <Router basename='/alex-blog' >
       <FrontendAuth {...routerConfig} />
     </Router>
   )
